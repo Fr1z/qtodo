@@ -12,11 +12,12 @@ Item {
     TextArea {                                                                                                                      
         id: inputTextArea                                                                                                               
         anchors.fill: parent                                                                                                        
-        font.pixelSize: 18                                                                                                   
+        font.pixelSize: 16                                                                                                 
         color: "white" 
         horizontalAlignment: TextArea.AlignHCenter                                                                                  
         verticalAlignment: TextArea.AlignVCenter                                                                                    
-        wrapMode: TextArea.Wrap 
+        wrapMode: TextArea.Wrap
+        placeholderText: "TODOs..."
         
         background: Rectangle {
             anchors.fill: parent   
@@ -33,8 +34,8 @@ Item {
             input.checked = false
             input.sublist = []
             thisModel.insert(0, input)  
-            saveModelToJson("todoListModel", todoListModel)
-            inputTextArea.text = ""                                                                                                                                                                         
+            inputTextArea.text = ""
+            saveModelToJson("todoListModel", todoListModel)                                                                                                                                                                  
         }                                                                                                                                                                                                                                                                                                               
     } 
 } 

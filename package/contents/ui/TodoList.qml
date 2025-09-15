@@ -4,8 +4,8 @@ import org.kde.kirigami as Kirigami
 
 ListView {    
     id: todoList                                                                                                 
-    anchors.topMargin: 10  
-    spacing: 10
+    anchors.topMargin: 8  
+    spacing: 8
     clip: true 
     anchors.top: inputItem.bottom
     
@@ -70,41 +70,6 @@ ListView {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 Row {
-                    spacing: 10
-                    Button {                                                                 
-                        id: detailButton                                                   
-                        text: "details"                                                     
-                        width: 10                          
-                        onClicked: {
-                            root.subModelTitle = model.text
-                            todoList.parentModelList.push(root.currentModel)
-                            todoList.parentModelTitleList.push(model.text)
-                            root.currentModel = thisModel.get(index).sublist
-                        }  
-                        background: Kirigami.Icon {
-                            id: detailIcon
-                            source: "application-menu-symbolic"
-                            width: Kirigami.Units.iconSizes.small
-                            height: width
-                            opacity: 0.7
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            HoverHandler {
-                                id: detailButtonHoverHandler
-                                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-                                cursorShape: Qt.PointingHandCursor
-                            }                                                                                
-                            states: [                                                                                     
-                                State {                                                                                                                                                   
-                                    when: detailButtonHoverHandler.hovered                                                                  
-                                    PropertyChanges {                                                                     
-                                        target: detailIcon                                                                 
-                                        opacity: 0.4                                                                 
-                                    }                                                                                     
-                                }                                                                                      
-                            ] 
-                        }                                                                                                    
-                    }
                     Button {                                                                 
                         id: dropdownButton                                                   
                         text: "Dropdown"                                                     
@@ -112,7 +77,7 @@ ListView {
                         onClicked: dropdownMenu.popup()    
                         background: Kirigami.Icon {
                             id: menuIcon
-                            source: "usermenu-down-symbolic"
+                            source: "application-menu-symbolic"
                             width: Kirigami.Units.iconSizes.small
                             height: width 
                             anchors.verticalCenter: parent.verticalCenter
@@ -146,10 +111,20 @@ ListView {
             Menu {
                 id: dropdownMenu
                 width: 100
+                MenuItem {                                                                                                                   
+                    contentItem: Button {
+                        id: editButton
+                        text: "Edit"
+                        onClicked: { 
+                            dropdownMenu.close()
+                            editPopup.open() 
+                        }
+                    }  
+                }
                 MenuItem { 
                     contentItem: Button {
                         id: deleteButton
-                        text: "remove"
+                        text: "Remove"
                         onClicked: { 
                             dropdownMenu.close()
                             thisModel.remove(index) 
@@ -157,16 +132,6 @@ ListView {
                         }
                     }   
                 }    
-                MenuItem {                                                                                                                   
-                    contentItem: Button {
-                        id: editButton
-                        text: "edit"
-                        onClicked: { 
-                            dropdownMenu.close()
-                            editPopup.open() 
-                        }
-                    }  
-                }
             }
             Popup {                                                                  
                 id: editPopup                                                       
@@ -197,8 +162,9 @@ ListView {
 
                     Keys.onReturnPressed: {  
                         model.text = editTextArea.text
+                        editPopup.close()
                         saveModelToJson("todoListModel", todoListModel)    
-                        editPopup.close()                                                                                                                                                          
+                                                                                                                                                                               
                     }                                                                                                                                                                                                                                                                                                               
                 }                                                                                                                         
             }
@@ -206,11 +172,12 @@ ListView {
             Text {   
                 id: todoText  
                 width: parent.width * 0.75
-                anchors.left: checkbox.right  
+                anchors.left: checkbox.right
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.leftMargin: 6
                 text: model.text                                                                                                        
                 font.pixelSize: 16                                                                                                      
-                color: "white"                                                                           
+                color: "white"                                                                       
                 wrapMode: Text.Wrap                                                                                                                                                                                               
             }        
             CheckBox {  

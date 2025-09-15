@@ -1,22 +1,26 @@
-import QtQuick            
-import QtQuick.Layouts                                             
-import org.kde.plasma.plasmoid                                         
-import QtQuick.Controls                                           
-import QtQuick.LocalStorage
+import QtQuick
+import QtQuick 2.15
+import QtQuick.Layouts 1.1
+import QtQuick.Controls
 import org.kde.plasma.core
-import org.kde.kirigami as Kirigami
+import org.kde.plasma.plasmoid 2.0
+import org.kde.ksvg 1.0 as KSvg
+import org.kde.kirigami 2.20 as Kirigami
+import QtQuick.LocalStorage 2.0
 
 PlasmoidItem {     
     id: root                                                           
     width: 300                                                       
     height: 400 
-    Layout.minimumWidth: 300                                                 
-    Layout.minimumHeight: 400     
+    Layout.minimumWidth: 60                                                 
+    Layout.minimumHeight: 80     
 
     property var mainModel: todoListModel
     property var currentModel: mainModel
     property bool subModel: !(mainModel == currentModel)
     property var subModelTitle
+
+    Plasmoid.backgroundHints: "NoBackground"; // Transparent is better
 
     Item {
         id: mainViewWrapper
