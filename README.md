@@ -1,2 +1,5 @@
 # qtodo
 A simple to-do list KDE Plasma 6 widget
+
+Added transparent background
+Load and save Todos from JSON

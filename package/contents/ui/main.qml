@@ -1,12 +1,12 @@
-import QtQuick
 import QtQuick 2.15
 import QtQuick.Layouts 1.1
 import QtQuick.Controls
-import org.kde.plasma.core
+import org.kde.plasma.core 2.0
 import org.kde.plasma.plasmoid 2.0
 import org.kde.ksvg 1.0 as KSvg
 import org.kde.kirigami 2.20 as Kirigami
-import QtQuick.LocalStorage 2.0
+
+
 
 PlasmoidItem {     
     id: root                                                           
@@ -15,12 +15,13 @@ PlasmoidItem {
     Layout.minimumWidth: 60                                                 
     Layout.minimumHeight: 80     
 
+    property var fileUrl : "/home/fr1z/.local/Qtodo.json"
     property var mainModel: todoListModel
     property var currentModel: mainModel
     property bool subModel: !(mainModel == currentModel)
     property var subModelTitle
 
-    Plasmoid.backgroundHints: "NoBackground"; // Transparent is better
+    Plasmoid.backgroundHints: "NoBackground" // Transparent background
 
     Item {
         id: mainViewWrapper
@@ -51,8 +52,9 @@ PlasmoidItem {
             height: subModel ? Math.max(title.contentHeight + 10, 40) : 0
             radius: 10
             anchors.top: parent.top
-            color: "black"
             opacity: 0.3
+            color: '#c9c9c9'
+            border.color: Qt.lighter(color, 1.1)
         }
         Text {    
             id: title 
@@ -116,6 +118,19 @@ PlasmoidItem {
         }                                        
     } 
 
+    function openFile(fileUrl) {
+        var request = new XMLHttpRequest();
+        request.open("GET", fileUrl, false);
+        request.send(null);
+        return request.responseText;
+    }
+
+    function saveFile(fileUrl, text) {
+        var request = new XMLHttpRequest();
+        request.open("PUT", fileUrl, false);
+        request.send(text);
+        return request.status;
+    }
 
     function saveModelToJson(fileName, listModel) {
         let jsonArray = []
@@ -123,23 +138,11 @@ PlasmoidItem {
             jsonArray.push(listModel.get(i))
         }
         let jsonString = JSON.stringify(jsonArray)
-        let file = LocalStorage.openDatabaseSync("qtodo", "1.0", "StorageDatabase", 5000000)
-        file.transaction(function(tx) {
-            tx.executeSql('CREATE TABLE IF NOT EXISTS ListData (id TEXT UNIQUE, data TEXT)')
-            tx.executeSql('INSERT OR REPLACE INTO ListData VALUES(?, ?)', [fileName, jsonString])
-        })
+        return saveFile(fileUrl, jsonString)
     }
 
     function loadModelFromJson(fileName, listModel) {
-        let file = LocalStorage.openDatabaseSync("qtodo", "1.0", "StorageDatabase", 5000000)
-        let jsonString = ""
-        file.transaction(function(tx) {
-            let rs = tx.executeSql('SELECT data FROM ListData WHERE id=?', [fileName])
-            if (rs.rows.length > 0) {
-                jsonString = rs.rows.item(0).data
-            }
-        })
-
+        jsonString = openFile(fileUrl);
         if (jsonString !== "") {
             let jsonArray = JSON.parse(jsonString)
             listModel.clear()

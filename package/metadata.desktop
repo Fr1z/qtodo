@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=Qtodo
+Comment="Simple TO-DO plasmoid widget"
+
+Icon=view-list-symbolic
+X-KDE-ServiceTypes=Plasma/Applet
+
+X-Plasma-MainScript=ui/main.qml
+
+X-KDE-PluginInfo-Author=Fr1z
+X-KDE-PluginInfo-Email=frahck@ymail.com
+X-KDE-PluginInfo-Name=com.fr1z.qtodo.widget
+X-KDE-PluginInfo-Version=1
+X-KDE-PluginInfo-Website=https://github.com/Fr1z/qtodo
+X-KDE-PluginInfo-KdeStoreId=
+X-KDE-PluginInfo-Category=Utilities
